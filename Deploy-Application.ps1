@@ -50,7 +50,7 @@ Param (
 
 Try {
 	## Set the script execution policy for this process
-	Try { Set-ExecutionPolicy -ExecutionPolicy 'ByPass' -Scope 'Process' -Force -ErrorAction 'Stop' } Catch { Write-Error "Failed to set the execution policy ot Bypass for this process." }
+	Try { Set-ExecutionPolicy -ExecutionPolicy 'ByPass' -Scope 'Process' -Force -ErrorAction 'Stop' } Catch { Write-Error "Failed to set the execution policy to Bypass for this process." }
 
 	##*===============================================
 	##* VARIABLE DECLARATION
@@ -162,7 +162,7 @@ Try {
 			Set-RegistryKey -Key 'HKCU\Software\Adobe\CommonFiles\Usage\Adobe Captivate' -Name 'OptIn' -Value 0 -Type DWord -SID $UserProfile.SID
 		}
 		Invoke-HKCURegistrySettingsForAllUsers -RegistrySettings $HKCURegistrySettings
-		Get-ChildItem -Path "${envSystemDrive}\Users" -Force | ?{ $_.PSIsContainer } | ForEach-Object {
+		Get-ChildItem -Path "${envSystemDrive}\Users" -Force | Where-Object { $_.PSIsContainer -eq $True } | ForEach-Object {
 			$CaptivateFolder = $_.FullName + "\AppData\Local\Adobe\Captivate 9.0"
 			If (!(Test-Path $CaptivateFolder) -eq $true) {
 				New-Folder $CaptivateFolder
@@ -234,8 +234,8 @@ Catch {
 # SIG # Begin signature block
 # MIIU4wYJKoZIhvcNAQcCoIIU1DCCFNACAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDSmxBNUp+I0jlo
-# AGTNDdBOUFo+aqS31Gh4L1ClXIMVK6CCD4cwggQUMIIC/KADAgECAgsEAAAAAAEv
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCErJK6HypJw6rH
+# 5inouwcezGV7iJW6XCzRra/aSm1w8KCCD4cwggQUMIIC/KADAgECAgsEAAAAAAEv
 # TuFS1zANBgkqhkiG9w0BAQUFADBXMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xv
 # YmFsU2lnbiBudi1zYTEQMA4GA1UECxMHUm9vdCBDQTEbMBkGA1UEAxMSR2xvYmFs
 # U2lnbiBSb290IENBMB4XDTExMDQxMzEwMDAwMFoXDTI4MDEyODEyMDAwMFowUjEL
@@ -322,26 +322,26 @@ Catch {
 # FgNlZHUxGTAXBgoJkiaJk/IsZAEZFgltc3VkZW52ZXIxFTATBgoJkiaJk/IsZAEZ
 # FgV3aW5hZDEZMBcGA1UEAxMQd2luYWQtVk1XQ0EwMS1DQQITfwAAACITuo77mvOv
 # 9AABAAAAIjANBglghkgBZQMEAgEFAKBmMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
-# gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwLwYJKoZIhvcNAQkEMSIEIJ55
-# CoefAeTwPWIpbXFUBaRptI9NAfKPtUQEUCfVnAswMA0GCSqGSIb3DQEBAQUABIIB
-# AFNH43VxAMXfufyI/2Vlr969i/Dv0lN12caitKM9eNn9B//SKWN/HSo1ymIc4G4/
-# wfnOP15sHzQtpOm82Ts2lISB22xffEGo/m8Ff++zjS8LUfO16E2mJvvSJkQ/g9H9
-# KQ2L00vhldS9hmYZsWV3fDMcXNrWd8II7On7E+eIRx/9SHBLXvzyslDqBaQtqObD
-# gRvWTBhn8uDTZjyOpLfC69KpUPFbgn/e84tGRNodObGaR/y4Xq9B/sVVtKgvs1mV
-# Pw9FAXlYIqsm9fs1E13I5rkjOjytZN2YMLfvmDmbXyhsTp6Ga5EF2f6CbeKicmu+
-# l5y47fr3f8+jFdK7LuXo8TGhggKiMIICngYJKoZIhvcNAQkGMYICjzCCAosCAQEw
+# gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwLwYJKoZIhvcNAQkEMSIEICEC
+# ns9E0qF0HAg8FtBUuWekb75BiTFImmitc3NJlV3IMA0GCSqGSIb3DQEBAQUABIIB
+# AKD2PGYtcMyFF3DgjLqwlYICwS8bJG15qEvWK+LCtaKT7g1L9Mt+LgU21YSX2iOf
+# IHaI0jkAC3s3cQJVzEdrggKGoQIh7FgVOPMzRbISh1mc44Za7pS4VKjiDHJzLhcs
+# XR81jG459hYp9XYQqKOl+IHyaGW/yc9iWFtEEKeXZRI8/eX1xNpdasWoyysB7dZ6
+# bWJBW/Wj7vlDhRz+nKNgtrmJDmGkLJRsSDgNrYnMsMpqycCZ02RmpRnvolva/G2O
+# QwL//7LEnbvVplm6UTDwTREWFXQpFepIx7PbjlUlfJbbyq9XfyWlFRCw6w5jT0c6
+# DreEKOQGCkgTP4ZpruAcy5+hggKiMIICngYJKoZIhvcNAQkGMYICjzCCAosCAQEw
 # aDBSMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTEoMCYG
 # A1UEAxMfR2xvYmFsU2lnbiBUaW1lc3RhbXBpbmcgQ0EgLSBHMgISESHWmadklz7x
 # +EJ+6RnMU0EUMAkGBSsOAwIaBQCggf0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEH
-# ATAcBgkqhkiG9w0BCQUxDxcNMTcwMzMxMjAwMjQ4WjAjBgkqhkiG9w0BCQQxFgQU
-# WVaIggYHtr1iAqjJ4Ddxj6xFoiUwgZ0GCyqGSIb3DQEJEAIMMYGNMIGKMIGHMIGE
+# ATAcBgkqhkiG9w0BCQUxDxcNMTcwNjE1MTU0MzI3WjAjBgkqhkiG9w0BCQQxFgQU
+# I7NVwWPFjgmWyC9sXskT3TBpuuEwgZ0GCyqGSIb3DQEJEAIMMYGNMIGKMIGHMIGE
 # BBRjuC+rYfWDkJaVBQsAJJxQKTPseTBsMFakVDBSMQswCQYDVQQGEwJCRTEZMBcG
 # A1UEChMQR2xvYmFsU2lnbiBudi1zYTEoMCYGA1UEAxMfR2xvYmFsU2lnbiBUaW1l
 # c3RhbXBpbmcgQ0EgLSBHMgISESHWmadklz7x+EJ+6RnMU0EUMA0GCSqGSIb3DQEB
-# AQUABIIBAAU5zIiAWUWG2EMpp+soE9/mJSnByMkFI/mH0S8HbN9QM2YIb/ahxK7p
-# vKNZ+I7jEz11uutxlotuqB8c7ybGYJlXFoWX/mQOgpvuhA6nkZBDG3CkqgNFMN7u
-# zZdRa2TOTPEcXt6P1cYKg0URdhTXwRaPEJwdrb9PutPW1oytO+cPMTx8jnLJeI8z
-# 64JczN4LsLDE+l1q1lA1eOowDihHi3hUlxAsQbhyeM9p8ZQCEKTzA3wFPD51X/KD
-# tvupXYDmgS/V1EpBe8sjltGUHSQSUOR6haTSOndfsJnOAwKkaYvCJ0RodzhIJn9M
-# wlxwYpjrQr4+PDXIRJWEf0JYG36Cchs=
+# AQUABIIBAK02ZKHk2tWvEU0OoMwAholuU0Rlpxi+WR2X4jlQjKa91toQow6P03Gu
+# +yBcEmvTGH2fCV5jgsFmN0f/GKPRfkJw9C7HTWqqUsBZFEVAdqKMvHK+qimbpa/r
+# GCQEQUGX1sld5YDpI4TGdxvQr/cdqXkRHoAZn0ueRBNOCe5sMV0xU2RCusMQ1KUD
+# MNunM8Eslr6D29xGiTnarQ6xNweDOaEEbN0eP7G+RIS42E9QO05OfMdnPruuZojq
+# MGEEgjTzDhWVymC3lcpzMtq4wtVhj32fQwVRH+3XIsxS5jN1EQZ+SPvSDGAnJSYn
+# K+4xPbljcQpxIs66MSyLsMegkClSKgg=
 # SIG # End signature block
